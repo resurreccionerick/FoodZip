@@ -1,8 +1,7 @@
-package com.example.foodzip
+package com.example.foodzip.domain
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.foodzip.domain.FoodRepository
 import com.example.foodzip.models.ResultType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

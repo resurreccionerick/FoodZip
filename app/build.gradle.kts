@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    //id("com.google.devtools.ksp")
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
 }
@@ -67,9 +66,7 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
     implementation("com.google.dagger:hilt-android:$hilt")
-    //ksp("com.google.dagger:hilt-compiler:$hilt")
 
     kapt(libs.hilt.compiler)
 
@@ -79,6 +76,7 @@ dependencies {
 
     implementation(libs.gson)
 
+    implementation(libs.androidx.material3.android)
 
     implementation(libs.androidx.hilt.navigation.compose)
 
