@@ -1,6 +1,7 @@
 package com.example.pagkain_mvvm.models.random
 
 data class MealsItem(
+
     val idMeal: String,
     val strMeal: String,
     val strDrinkAlternate: String?,

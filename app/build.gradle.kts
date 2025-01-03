@@ -2,8 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     //id("com.google.devtools.ksp")
-    id ("kotlin-kapt")
-    id ("dagger.hilt.android.plugin")
+    id("kotlin-kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -73,11 +73,16 @@ dependencies {
 
     kapt(libs.hilt.compiler)
 
-    implementation ("com.squareup.retrofit2:converter-gson:$retrofit_version")
-    implementation ("com.squareup.retrofit2:retrofit:$retrofit_version")
-    implementation ("com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2")
+    implementation("com.squareup.retrofit2:converter-gson:$retrofit_version")
+    implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
+    implementation("com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2")
+
+    implementation(libs.gson)
+
 
     implementation(libs.androidx.hilt.navigation.compose)
+
+    implementation(libs.coil.compose)
 
     testImplementation(libs.junit)
     implementation("com.google.dagger:hilt-android:2.40.5")
