@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.foodzip.composables.BottomNavBar
 import com.example.foodzip.composables.HomeScreen
+import com.example.foodzip.composables.MealItemDetails
 
 @Composable
 fun NavigationStack() {
@@ -32,6 +33,12 @@ fun NavigationStack() {
 
             composable("settings_screen") {
                 HomeScreen(navController = navController)
+            }
+
+            composable("meal_details/{mealId}") { navBackEntry ->
+                val mealId = navBackEntry.arguments?.getString("mealId")
+                mealId?.let { MealItemDetails(navController, mealID = it) }
+
             }
         }
     }

@@ -13,4 +13,6 @@ interface ApiService {
     @GET("filter.php?")
     suspend fun getPopularList(@Query("c") popularName: String): PopularList
 
+    @GET("lookup.php?")
+    suspend fun getMealDetails(@Query("i") id: String): FoodListResponse
 }

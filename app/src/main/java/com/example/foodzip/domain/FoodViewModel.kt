@@ -31,4 +31,10 @@ class FoodViewModel @Inject constructor
             _mealListState.value = repository.getMealListPopular()
         }
     }
+
+    fun getMealInfo(id: String) {
+        viewModelScope.launch {
+            _mealState.value = repository.getMealInfo(id)
+        }
+    }
 }

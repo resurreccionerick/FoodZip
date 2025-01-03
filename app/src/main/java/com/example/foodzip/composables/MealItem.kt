@@ -1,8 +1,8 @@
 package com.example.foodzip.composables
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -14,12 +14,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.foodzip.domain.FoodViewModel
 
 @Composable
-fun MealItem(viewModel: ViewModel, context: Context, img: String, label: String) {
-    Card() {
+fun MealItem(
+    navController: NavController,
+    viewModel: FoodViewModel,
+    context: Context,
+    img: String,
+    label: String,
+    mealId: String
+) {
+    Card(onClick = {
+        navController.navigate("meal_details/$mealId")
+    }) {
         Column {
             AsyncImage(
                 model = img, // Pass the URL here

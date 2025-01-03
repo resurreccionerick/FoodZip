@@ -23,6 +23,19 @@ class FoodRepositoryImpl(
         }
     }
 
+    override suspend fun getMealInfo(id: String): ResultType {
+        return try {
+            val response = apiService.getMealDetails(id)
+            if (response.meals.isNotEmpty()) {
+                ResultType.Success(response.meals[0])
+            }else{
+                ResultType.Error("No meals found")
+            }
+        } catch (e: Exception) {
+            ResultType.Error(e.localizedMessage ?: "Unknown error occurred")
+        }
+    }
+
     override suspend fun getMealListPopular(): ResultPopularList {
         return try {
             val response = apiService.getPopularList("Dessert")
@@ -36,4 +49,6 @@ class FoodRepositoryImpl(
             ResultPopularList.Error(e.localizedMessage ?: "Unknown error occurred")
         }
     }
+
+
 }

@@ -70,14 +70,16 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
         Text(text = "What would you like to eat?")
-        
+
         when (val result = randomMealState.value) {
             is ResultType.Loading -> CircularProgressIndicator()
             is ResultType.Success -> MealItem(
+                navController = navController,
                 viewModel = viewModel,
                 context = context,
                 img = result.meal.strMealThumb,
-                label = result.meal.strMeal
+                label = result.meal.strMeal,
+                mealId = result.meal.idMeal
             )
 
             is ResultType.Error -> Log.d("RANDOM MEAL ERROR:", "ERROR: " + result.msg)
