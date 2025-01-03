@@ -81,6 +81,8 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
 
     implementation(libs.coil.compose)
+    implementation (libs.androidx.material)
+    implementation(libs.androidx.navigation.compose)
 
     testImplementation(libs.junit)
     implementation("com.google.dagger:hilt-android:2.40.5")
