@@ -46,7 +46,7 @@ fun BottomNavBar(
 sealed class Screen(val route: String, val label: String, val icon: ImageVector) {
     data object Home : Screen("home_screen", "Home", Icons.Default.Home)
     data object Assessment : Screen("favorite_screen", "Favorite", Icons.Default.Favorite)
-    data object Settings : Screen("settings_screen", "Settings", Icons.Default.Settings)
+    data object Settings : Screen("categories_screen", "Settings", Icons.Default.Settings)
 }
 
 

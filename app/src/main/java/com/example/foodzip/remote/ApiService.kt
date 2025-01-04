@@ -1,5 +1,6 @@
 package com.example.foodzip.remote
 
+import com.example.pagkain_mvvm.models.category.Category
 import com.example.pagkain_mvvm.models.popular.PopularList
 import com.example.pagkain_mvvm.models.random.FoodListResponse
 import retrofit2.http.GET
@@ -15,4 +16,7 @@ interface ApiService {
 
     @GET("lookup.php?")
     suspend fun getMealDetails(@Query("i") id: String): FoodListResponse
+
+    @GET("categories.php")
+    suspend fun getCategories(): Category
 }

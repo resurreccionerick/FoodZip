@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.foodzip.composables.BottomNavBar
+import com.example.foodzip.composables.CategoriesScreen
 import com.example.foodzip.composables.HomeScreen
 import com.example.foodzip.composables.MealItemDetails
 
@@ -41,9 +42,9 @@ fun NavigationStack() {
                 HomeScreen(navController = navController)
             }
 
-            composable("settings_screen") {
+            composable("categories_screen") {
                 showBtmNavBar = true
-                HomeScreen(navController = navController)
+                CategoriesScreen(navController = navController)
             }
 
             composable("meal_details/{mealId}") { navBackEntry ->
