@@ -33,6 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.foodzip.R
+import com.example.foodzip.composables.items.MealItem
+import com.example.foodzip.composables.items.MealItemRow
 import com.example.foodzip.domain.FoodViewModel
 import com.example.foodzip.models.ResultPopularList
 import com.example.foodzip.models.ResultType

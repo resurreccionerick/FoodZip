@@ -1,6 +1,7 @@
 package com.example.foodzip.remote
 
 import com.example.pagkain_mvvm.models.category.Category
+import com.example.pagkain_mvvm.models.category.categoryfood.CategoryFood
 import com.example.pagkain_mvvm.models.popular.PopularList
 import com.example.pagkain_mvvm.models.random.FoodListResponse
 import retrofit2.http.GET
@@ -19,4 +20,7 @@ interface ApiService {
 
     @GET("categories.php")
     suspend fun getCategories(): Category
+
+    @GET("filter.php?")
+    suspend fun getCategoriesFood(@Query("c") id: String): CategoryFood
 }

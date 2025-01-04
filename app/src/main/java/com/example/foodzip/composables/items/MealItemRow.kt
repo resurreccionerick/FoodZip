@@ -1,9 +1,7 @@
-package com.example.foodzip.composables
+package com.example.foodzip.composables.items
 
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,25 +13,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.foodzip.domain.FoodViewModel
+import com.example.pagkain_mvvm.models.popular.PopularMeal
 
 @Composable
-fun MealItem(
+fun MealItemRow(
     navController: NavController,
-    viewModel: FoodViewModel,
+    viewModel: ViewModel,
     context: Context,
-    img: String,
-    label: String,
-    mealId: String
+    meal: PopularMeal
 ) {
     Card(onClick = {
-        navController.navigate("meal_details/$mealId")
+        navController.navigate("meal_details/${meal.idMeal}")
     }) {
         Column {
             AsyncImage(
-                model = img, // Pass the URL here
+                model = meal.strMealThumb, // Pass the URL here
                 contentDescription = "Image",
                 modifier = Modifier
                     .fillMaxWidth()
@@ -47,7 +44,7 @@ fun MealItem(
                 modifier = Modifier
                     .padding(8.dp)
                     .align(Alignment.CenterHorizontally),
-                text = label,
+                text = meal.strMeal,
                 fontWeight = FontWeight.Bold
             )
         }

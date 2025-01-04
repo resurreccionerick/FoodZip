@@ -1,6 +1,7 @@
 package com.example.foodzip.domain
 
 import android.app.Application
+import com.example.foodzip.models.ResultCategoryInfoList
 import com.example.foodzip.models.ResultCategoryList
 import com.example.foodzip.models.ResultPopularList
 import com.example.foodzip.models.ResultType
@@ -63,6 +64,22 @@ class FoodRepositoryImpl(
             }
         } catch (e: Exception) {
             ResultCategoryList.Error(e.localizedMessage ?: "Unknown error occurred")
+        }
+    }
+
+
+    override suspend fun getCategoriesFood(id: String): ResultCategoryInfoList {
+        return try {
+            val response = apiService.getCategoriesFood(id)
+
+            if (response.meals.isNotEmpty()) {
+                ResultCategoryInfoList.Success(response.meals)
+            } else {
+                ResultCategoryInfoList.Error("No Popular Meals found")
+            }
+
+        } catch (e: Exception) {
+            ResultCategoryInfoList.Error(e.localizedMessage ?: "Unknown error occurred")
         }
     }
 

@@ -1,4 +1,4 @@
-package com.example.foodzip.composables
+package com.example.foodzip.composables.items
 
 import android.content.Context
 import androidx.compose.foundation.layout.Column
@@ -13,24 +13,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.pagkain_mvvm.models.popular.PopularMeal
+import com.example.foodzip.domain.FoodViewModel
 
 @Composable
-fun MealItemRow(
+fun MealItem(
     navController: NavController,
-    viewModel: ViewModel,
+    viewModel: FoodViewModel,
     context: Context,
-    meal: PopularMeal
+    img: String,
+    label: String,
+    mealId: String
 ) {
     Card(onClick = {
-        navController.navigate("meal_details/${meal.idMeal}")
+        navController.navigate("meal_details/$mealId")
     }) {
         Column {
             AsyncImage(
-                model = meal.strMealThumb, // Pass the URL here
+                model = img, // Pass the URL here
                 contentDescription = "Image",
                 modifier = Modifier
                     .fillMaxWidth()
@@ -44,7 +45,7 @@ fun MealItemRow(
                 modifier = Modifier
                     .padding(8.dp)
                     .align(Alignment.CenterHorizontally),
-                text = meal.strMeal,
+                text = label,
                 fontWeight = FontWeight.Bold
             )
         }

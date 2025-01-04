@@ -14,7 +14,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.foodzip.composables.BottomNavBar
 import com.example.foodzip.composables.CategoriesScreen
 import com.example.foodzip.composables.HomeScreen
-import com.example.foodzip.composables.MealItemDetails
+import com.example.foodzip.composables.items.CategoryFoodItem
+import com.example.foodzip.composables.items.MealItemDetails
 
 @Composable
 fun NavigationStack() {
@@ -52,6 +53,12 @@ fun NavigationStack() {
                 val mealId = navBackEntry.arguments?.getString("mealId")
                 mealId?.let { MealItemDetails(navController, mealID = it) }
 
+            }
+
+            composable("category_food/{categoryId}") { navBackStackEntry ->
+                showBtmNavBar = false
+                val categoryId = navBackStackEntry.arguments?.getString("categoryId")
+                categoryId?.let { CategoryFoodItem(navController, categoryId = it) }
             }
         }
     }
