@@ -14,12 +14,20 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.pagkain_mvvm.models.popular.PopularMeal
 
 @Composable
-fun MealItemRow(viewModel: ViewModel, context: Context, meal: PopularMeal) {
-    Card() {
+fun MealItemRow(
+    navController: NavController,
+    viewModel: ViewModel,
+    context: Context,
+    meal: PopularMeal
+) {
+    Card(onClick = {
+        navController.navigate("meal_details/${meal.idMeal}")
+    }) {
         Column {
             AsyncImage(
                 model = meal.strMealThumb, // Pass the URL here

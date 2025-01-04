@@ -3,6 +3,10 @@ package com.example.foodzip.navigation
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,9 +18,13 @@ import com.example.foodzip.composables.MealItemDetails
 @Composable
 fun NavigationStack() {
     val navController = rememberNavController()
+    var showBtmNavBar by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(bottomBar = {
-        BottomNavBar(navController = navController)
+        if (showBtmNavBar) {
+            BottomNavBar(navController = navController)
+        }
+
     }) { innerPadding ->
         NavHost(
             navController = navController,
@@ -24,18 +32,22 @@ fun NavigationStack() {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable("home_screen") {
+                showBtmNavBar = true
                 HomeScreen(navController = navController)
             }
 
             composable("favorite_screen") {
+                showBtmNavBar = true
                 HomeScreen(navController = navController)
             }
 
             composable("settings_screen") {
+                showBtmNavBar = true
                 HomeScreen(navController = navController)
             }
 
             composable("meal_details/{mealId}") { navBackEntry ->
+                showBtmNavBar = false
                 val mealId = navBackEntry.arguments?.getString("mealId")
                 mealId?.let { MealItemDetails(navController, mealID = it) }
 
