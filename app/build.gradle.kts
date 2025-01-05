@@ -84,6 +84,12 @@ dependencies {
     implementation (libs.androidx.material)
     implementation(libs.androidx.navigation.compose)
 
+    implementation ("androidx.room:room-runtime:2.6.1")
+    annotationProcessor( "androidx.room:room-compiler:2.6.1")
+    kapt ("androidx.room:room-compiler:2.6.1")
+
+    implementation ("androidx.room:room-ktx:2.6.1")
+
     testImplementation(libs.junit)
     implementation("com.google.dagger:hilt-android:2.40.5")
     androidTestImplementation(libs.androidx.junit)

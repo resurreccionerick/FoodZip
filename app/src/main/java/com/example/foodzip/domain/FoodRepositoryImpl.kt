@@ -1,16 +1,20 @@
 package com.example.foodzip.domain
 
-import android.app.Application
+import com.example.foodzip.database.FoodDAO
 import com.example.foodzip.models.ResultCategoryInfoList
 import com.example.foodzip.models.ResultCategoryList
+import com.example.foodzip.models.ResultFavorites
 import com.example.foodzip.models.ResultPopularList
 import com.example.foodzip.models.ResultType
 import com.example.foodzip.remote.ApiService
-import com.example.pagkain_mvvm.models.category.Category
+import com.example.pagkain_mvvm.models.random.MealsItem
+import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class FoodRepositoryImpl(
+
+class FoodRepositoryImpl @Inject constructor(
+    private val foodDAO: FoodDAO,
     private val apiService: ApiService,
-    private val context: Application
 ) : FoodRepository {
 
     override suspend fun getRandomMeal(): ResultType {
@@ -82,6 +86,27 @@ class FoodRepositoryImpl(
             ResultCategoryInfoList.Error(e.localizedMessage ?: "Unknown error occurred")
         }
     }
+
+    override suspend fun insertFavorite(fav: MealsItem): ResultFavorites {
+        return try {
+            foodDAO.upsertMeal(fav)
+            ResultFavorites.Success("Inserted Successfully")
+        } catch (e: Exception) {
+            ResultFavorites.Error("Error: $e")
+        }
+    }
+
+    override suspend fun deleteFavorite(fav: MealsItem): ResultFavorites {
+        return try {
+            foodDAO.deleteMeal(fav)
+            ResultFavorites.Success("Deleted Successfully")
+        } catch (e: Exception) {
+            ResultFavorites.Error("Error: $e")
+        }
+    }
+
+
+    override fun getFavorites(): Flow<List<MealsItem>> = foodDAO.getAllFavorites()
 
 
 }

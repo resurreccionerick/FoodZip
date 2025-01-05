@@ -1,12 +1,13 @@
 package com.example.foodzip.domain
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.foodzip.models.ResultCategoryInfoList
 import com.example.foodzip.models.ResultCategoryList
+import com.example.foodzip.models.ResultFavorites
 import com.example.foodzip.models.ResultPopularList
 import com.example.foodzip.models.ResultType
+import com.example.pagkain_mvvm.models.random.MealsItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,11 +23,13 @@ class FoodViewModel @Inject constructor
     private val _categoriesState = MutableStateFlow<ResultCategoryList>(ResultCategoryList.Loading)
     private val _categoryFoodState =
         MutableStateFlow<ResultCategoryInfoList>(ResultCategoryInfoList.Loading)
+    private val _favoritesState = MutableStateFlow<ResultFavorites>(ResultFavorites.Loading)
 
     val mealState: StateFlow<ResultType> get() = _mealState
     val mealListState: StateFlow<ResultPopularList> get() = _mealListState
     val categoriesState: StateFlow<ResultCategoryList> get() = _categoriesState
     val categoryFoodState: StateFlow<ResultCategoryInfoList> get() = _categoryFoodState
+    val favoritesState: StateFlow<ResultFavorites> get() = _favoritesState
 
     fun getRandomMeal() {
         viewModelScope.launch {
@@ -57,4 +60,19 @@ class FoodViewModel @Inject constructor
             _categoryFoodState.value = repository.getCategoriesFood(id)
         }
     }
+
+    fun addFavorite(fav: MealsItem) {
+        viewModelScope.launch {
+            _favoritesState.value = repository.insertFavorite(fav)
+            repository.insertFavorite(fav)
+        }
+    }
+
+    fun deleteFavorite(fav: MealsItem) {
+        viewModelScope.launch {
+            repository.deleteFavorite(fav)
+        }
+    }
+
+
 }
