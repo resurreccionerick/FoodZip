@@ -7,6 +7,7 @@ import com.example.foodzip.models.ResultCategoryInfoList
 import com.example.foodzip.models.ResultCategoryList
 import com.example.foodzip.models.ResultFavorites
 import com.example.foodzip.models.ResultPopularList
+import com.example.foodzip.models.ResultSearch
 import com.example.foodzip.models.ResultType
 import com.example.pagkain_mvvm.models.random.MealsItem
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,6 +28,7 @@ class FoodViewModel @Inject constructor
     private val _favoritesState = MutableStateFlow<ResultFavorites>(ResultFavorites.Loading)
     private val _addedFavoritesState =
         MutableStateFlow<ResultAddedFavorites>(ResultAddedFavorites.Loading)
+    private val _searchState = MutableStateFlow<ResultSearch>(ResultSearch.Loading)
 
     val mealState: StateFlow<ResultType> get() = _mealState
     val mealListState: StateFlow<ResultPopularList> get() = _mealListState
@@ -34,6 +36,7 @@ class FoodViewModel @Inject constructor
     val categoryFoodState: StateFlow<ResultCategoryInfoList> get() = _categoryFoodState
     val favoritesState: StateFlow<ResultFavorites> get() = _favoritesState
     val addedFavorites: StateFlow<ResultAddedFavorites> get() = _addedFavoritesState
+    val searchState: StateFlow<ResultSearch> get() = _searchState
 
     fun getRandomMeal() {
         viewModelScope.launch {
@@ -81,9 +84,12 @@ class FoodViewModel @Inject constructor
     fun getAllFavorites() {
         viewModelScope.launch {
             _addedFavoritesState.value = repository.getFavorites()
-            //repository.getFavorites()
         }
     }
 
-
+    fun searchMeal(meal: String) {
+        viewModelScope.launch {
+            _searchState.value = repository.searchMeal(meal)
+        }
+    }
 }

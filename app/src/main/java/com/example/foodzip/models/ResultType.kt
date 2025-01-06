@@ -1,7 +1,6 @@
 package com.example.foodzip.models
 
 
-import androidx.compose.runtime.State
 import com.example.pagkain_mvvm.models.category.CategoryList
 import com.example.pagkain_mvvm.models.category.categoryfood.Meal
 import com.example.pagkain_mvvm.models.popular.PopularMeal
@@ -42,4 +41,10 @@ sealed class ResultAddedFavorites {
     data class Success(val meal: Flow<List<MealsItem>>) : ResultAddedFavorites()
     data class Error(val msg: String) : ResultAddedFavorites()
     data object Loading : ResultAddedFavorites()
+}
+
+sealed class ResultSearch {
+    data class Success(val meal: List<MealsItem>) : ResultSearch()
+    data class Error(val msg: String) : ResultSearch()
+    object Loading : ResultSearch()
 }

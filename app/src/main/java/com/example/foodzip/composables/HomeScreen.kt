@@ -2,6 +2,7 @@ package com.example.foodzip.composables
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,12 +10,12 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -37,7 +38,9 @@ import com.example.foodzip.composables.items.MealItem
 import com.example.foodzip.composables.items.MealItemRow
 import com.example.foodzip.domain.FoodViewModel
 import com.example.foodzip.models.ResultPopularList
+import com.example.foodzip.models.ResultSearch
 import com.example.foodzip.models.ResultType
+
 
 @Composable
 fun HomeScreen(
@@ -45,81 +48,169 @@ fun HomeScreen(
     viewModel: FoodViewModel = hiltViewModel(),
     context: Context = LocalContext.current
 ) {
-    var randomMealState = viewModel.mealState.collectAsState()
-    var mealListState = viewModel.mealListState.collectAsState()
+    val randomMealState = viewModel.mealState.collectAsState()
+    val mealListState = viewModel.mealListState.collectAsState()
+    val searchState = viewModel.searchState.collectAsState()
 
     var search by rememberSaveable { mutableStateOf("") }
+    var searchOn by rememberSaveable { mutableStateOf(false) }
 
-    LaunchedEffect(Unit) {
+    // Trigger search or fetch meals when search query changes
+    LaunchedEffect(search) {
         viewModel.getRandomMeal()
         viewModel.getMealListPopular()
+        if (search.isNotBlank()) {
+            viewModel.searchMeal(search)
+            searchOn = true // Enable search view
+        } else {
+            searchOn = false // Return to normal view
+        }
     }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
-            .verticalScroll(rememberScrollState()),
-    )
-    {
-        Row(
-            modifier = Modifier
-                .padding(bottom = 8.dp)
-                .height(80.dp)
-        ) {
-            Image(
-                painterResource(R.drawable.foodzip_logo),
-                contentDescription = "",
-                contentScale = ContentScale.Fit,
-            )
-            OutlinedTextField(modifier = Modifier.weight(1f),
-                value = search,
-                onValueChange = { search = it },
-                label = { Text(text = "Search...") }
-            )
-        }
+    ) {
 
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "What would you like to eat?")
+        // Header with logo and search bar
+        HeaderSection(search = search, onSearchChanged = { query ->
+            search = query
+        })
 
-        when (val result = randomMealState.value) {
-            is ResultType.Loading -> CircularProgressIndicator()
-            is ResultType.Success -> MealItem(
+        if (!searchOn) { // Normal view
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(text = "What would you like to eat?")
+
+            // Random Meal Section
+            MealSection(
+                result = randomMealState.value,
+                onError = { msg -> Log.d("RANDOM MEAL ERROR:", msg) },
                 navController = navController,
                 viewModel = viewModel,
-                context = context,
-                img = result.meal.strMealThumb,
-                label = result.meal.strMeal,
-                mealId = result.meal.idMeal
+                context = context
             )
 
-            is ResultType.Error -> Log.d("RANDOM MEAL ERROR:", "ERROR: " + result.msg)
+            Spacer(modifier = Modifier.height(32.dp))
+            Text(text = "Popular Meals:")
+
+            // Popular Meals Section
+            PopularMealsSection(
+                result = mealListState.value,
+                onError = { msg -> Log.d("LIST OF MEAL ERROR:", msg) },
+                navController = navController,
+                viewModel = viewModel,
+                context = context
+            )
+        } else { // Search results view
+            SearchResultSection(
+                result = searchState.value,
+                navController = navController,
+                viewModel = viewModel,
+                context = context
+            )
         }
+    }
+}
 
-        Spacer(modifier = Modifier.height(32.dp))
+@Composable
+fun HeaderSection(search: String, onSearchChanged: (String) -> Unit) {
+    Row(
+        modifier = Modifier
+            .padding(bottom = 8.dp)
+            .height(80.dp)
+    ) {
+        Image(
+            painter = painterResource(R.drawable.foodzip_logo),
+            contentDescription = "",
+            contentScale = ContentScale.Fit,
+        )
+        OutlinedTextField(
+            value = search,
+            onValueChange = onSearchChanged,
+            label = { Text("Search") },
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
+}
 
-        Text(text = "Popular Meals:")
+@Composable
+fun MealSection(
+    result: ResultType,
+    onError: (String) -> Unit,
+    navController: NavController,
+    viewModel: FoodViewModel,
+    context: Context
+) {
+    when (result) {
+        is ResultType.Loading -> CircularProgressIndicator()
+        is ResultType.Success -> MealItem(
+            navController = navController,
+            viewModel = viewModel,
+            context = context,
+            img = result.meal.strMealThumb,
+            label = result.meal.strMeal,
+            mealId = result.meal.idMeal
+        )
+        is ResultType.Error -> onError(result.msg)
+    }
+}
 
-        when (val result = mealListState.value) {
-            is ResultPopularList.Loading -> CircularProgressIndicator()
-
-            is ResultPopularList.Success -> LazyRow(
+@Composable
+fun SearchResultSection(
+    result: ResultSearch,
+    navController: NavController,
+    viewModel: FoodViewModel,
+    context: Context
+) {
+    when (result) {
+        is ResultSearch.Loading -> Text("Loading...")
+        is ResultSearch.Error -> {
+            Toast.makeText(LocalContext.current, result.msg, Toast.LENGTH_SHORT).show()
+        }
+        is ResultSearch.Success -> {
+            LazyColumn(
                 contentPadding = PaddingValues(horizontal = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(result.meal) { meal ->
-                    MealItemRow(
-                        navController,
+                    MealItem(
+                        navController = navController,
                         viewModel = viewModel,
                         context = context,
-                        meal = meal
+                        img = meal.strMealThumb,
+                        label = meal.strMeal,
+                        mealId = meal.idMeal
                     )
                 }
             }
-
-            is ResultPopularList.Error -> Log.d("LIST OF MEAL ERROR:", "ERROR: " + result.msg)
         }
+    }
+}
 
-
+@Composable
+fun PopularMealsSection(
+    result: ResultPopularList,
+    onError: (String) -> Unit,
+    navController: NavController,
+    viewModel: FoodViewModel,
+    context: Context
+) {
+    when (result) {
+        is ResultPopularList.Loading -> CircularProgressIndicator()
+        is ResultPopularList.Success -> LazyRow(
+            contentPadding = PaddingValues(horizontal = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(result.meal) { meal ->
+                MealItemRow(
+                    navController = navController,
+                    viewModel = viewModel,
+                    context = context,
+                    meal = meal
+                )
+            }
+        }
+        is ResultPopularList.Error -> onError(result.msg)
     }
 }

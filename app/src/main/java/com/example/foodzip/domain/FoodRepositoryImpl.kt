@@ -6,11 +6,10 @@ import com.example.foodzip.models.ResultCategoryInfoList
 import com.example.foodzip.models.ResultCategoryList
 import com.example.foodzip.models.ResultFavorites
 import com.example.foodzip.models.ResultPopularList
+import com.example.foodzip.models.ResultSearch
 import com.example.foodzip.models.ResultType
 import com.example.foodzip.remote.ApiService
 import com.example.pagkain_mvvm.models.random.MealsItem
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 
@@ -116,6 +115,19 @@ class FoodRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun searchMeal(meal: String): ResultSearch {
+        return try {
+            val response = apiService.searchMeal(meal)
 
+            // Check if meals is not empty
+            if (response.meals.isNotEmpty()) {
+                ResultSearch.Success(response.meals)
+            } else {
+                ResultSearch.Error("No meals found")
+            }
+        } catch (e: Exception) {
+            ResultSearch.Error(e.localizedMessage ?: "Unknown error occurred")
+        }
+    }
 
 }

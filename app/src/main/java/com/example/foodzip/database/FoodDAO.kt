@@ -19,4 +19,5 @@ interface FoodDAO {
 
     @Query("SELECT * FROM food_table")
     fun getAllFavorites(): Flow<List<MealsItem>>
+
 }
