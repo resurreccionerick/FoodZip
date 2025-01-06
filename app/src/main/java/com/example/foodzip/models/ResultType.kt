@@ -6,6 +6,7 @@ import com.example.pagkain_mvvm.models.category.CategoryList
 import com.example.pagkain_mvvm.models.category.categoryfood.Meal
 import com.example.pagkain_mvvm.models.popular.PopularMeal
 import com.example.pagkain_mvvm.models.random.MealsItem
+import kotlinx.coroutines.flow.Flow
 
 sealed class ResultType {
     data class Success(val meal: MealsItem) : ResultType()
@@ -35,4 +36,10 @@ sealed class ResultFavorites {
     data class Success(val msg: String) : ResultFavorites()
     data class Error(val msg: String) : ResultFavorites()
     object Loading : ResultFavorites()
+}
+
+sealed class ResultAddedFavorites {
+    data class Success(val meal: Flow<List<MealsItem>>) : ResultAddedFavorites()
+    data class Error(val msg: String) : ResultAddedFavorites()
+    data object Loading : ResultAddedFavorites()
 }

@@ -1,6 +1,7 @@
 package com.example.foodzip.domain
 
 import com.example.foodzip.database.FoodDAO
+import com.example.foodzip.models.ResultAddedFavorites
 import com.example.foodzip.models.ResultCategoryInfoList
 import com.example.foodzip.models.ResultCategoryList
 import com.example.foodzip.models.ResultFavorites
@@ -9,6 +10,7 @@ import com.example.foodzip.models.ResultType
 import com.example.foodzip.remote.ApiService
 import com.example.pagkain_mvvm.models.random.MealsItem
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 
@@ -105,8 +107,15 @@ class FoodRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getFavorites(): ResultAddedFavorites {
+        return try {
+            val response = foodDAO.getAllFavorites()
+            ResultAddedFavorites.Success(response)
+        } catch (e: Exception) {
+            ResultAddedFavorites.Error("Error: $e")
+        }
+    }
 
-    override fun getFavorites(): Flow<List<MealsItem>> = foodDAO.getAllFavorites()
 
 
 }

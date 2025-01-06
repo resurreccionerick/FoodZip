@@ -2,6 +2,7 @@ package com.example.foodzip.domain
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.foodzip.models.ResultAddedFavorites
 import com.example.foodzip.models.ResultCategoryInfoList
 import com.example.foodzip.models.ResultCategoryList
 import com.example.foodzip.models.ResultFavorites
@@ -24,12 +25,15 @@ class FoodViewModel @Inject constructor
     private val _categoryFoodState =
         MutableStateFlow<ResultCategoryInfoList>(ResultCategoryInfoList.Loading)
     private val _favoritesState = MutableStateFlow<ResultFavorites>(ResultFavorites.Loading)
+    private val _addedFavoritesState =
+        MutableStateFlow<ResultAddedFavorites>(ResultAddedFavorites.Loading)
 
     val mealState: StateFlow<ResultType> get() = _mealState
     val mealListState: StateFlow<ResultPopularList> get() = _mealListState
     val categoriesState: StateFlow<ResultCategoryList> get() = _categoriesState
     val categoryFoodState: StateFlow<ResultCategoryInfoList> get() = _categoryFoodState
     val favoritesState: StateFlow<ResultFavorites> get() = _favoritesState
+    val addedFavorites: StateFlow<ResultAddedFavorites> get() = _addedFavoritesState
 
     fun getRandomMeal() {
         viewModelScope.launch {
@@ -71,6 +75,13 @@ class FoodViewModel @Inject constructor
     fun deleteFavorite(fav: MealsItem) {
         viewModelScope.launch {
             repository.deleteFavorite(fav)
+        }
+    }
+
+    fun getAllFavorites() {
+        viewModelScope.launch {
+            _addedFavoritesState.value = repository.getFavorites()
+            //repository.getFavorites()
         }
     }
 

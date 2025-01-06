@@ -1,5 +1,6 @@
 package com.example.foodzip.domain
 
+import com.example.foodzip.models.ResultAddedFavorites
 import com.example.foodzip.models.ResultCategoryInfoList
 import com.example.foodzip.models.ResultCategoryList
 import com.example.foodzip.models.ResultFavorites
@@ -18,5 +19,5 @@ interface FoodRepository {
     //room
     suspend fun insertFavorite(fav: MealsItem): ResultFavorites
     suspend fun deleteFavorite(fav: MealsItem): ResultFavorites
-    fun getFavorites(): Flow<List<MealsItem>>
+    suspend fun getFavorites(): ResultAddedFavorites
 }
