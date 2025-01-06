@@ -6,6 +6,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -46,7 +47,7 @@ fun BottomNavBar(
 sealed class Screen(val route: String, val label: String, val icon: ImageVector) {
     data object Home : Screen("home_screen", "Home", Icons.Default.Home)
     data object Assessment : Screen("favorite_screen", "Favorite", Icons.Default.Favorite)
-    data object Settings : Screen("categories_screen", "Settings", Icons.Default.Settings)
+    data object Settings : Screen("categories_screen", "Settings", Icons.Default.Menu)
 }
 
 
