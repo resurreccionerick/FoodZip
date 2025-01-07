@@ -24,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.foodzip.composables.NavTopBar
 import com.example.foodzip.domain.FoodViewModel
 import com.example.foodzip.models.ResultCategoryInfoList
 
@@ -46,14 +47,8 @@ fun CategoryFoodItem(
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "FOOD: ",
-            modifier = Modifier
-                .padding(16.dp)
-                .align(Alignment.CenterHorizontally),
-            fontWeight = FontWeight.Bold
+        NavTopBar(navController, title = "Food available", canNavigateBack = true)
 
-        )
         when (val result = categoryFoodState.value) {
             ResultCategoryInfoList.Loading -> CircularProgressIndicator()
 

@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.foodzip.composables.NavTopBar
 import com.example.foodzip.domain.FoodViewModel
 import com.example.foodzip.models.ResultFavorites
 import com.example.foodzip.models.ResultType
@@ -79,6 +80,7 @@ fun MealItemDetails(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                NavTopBar(navController, title = "Meal Details", canNavigateBack = true)
                 AsyncImage(
                     model = result.meal.strMealThumb, // Pass the URL here
                     contentDescription = "Image",

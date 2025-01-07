@@ -152,6 +152,7 @@ fun MealSection(
             label = result.meal.strMeal,
             mealId = result.meal.idMeal
         )
+
         is ResultType.Error -> onError(result.msg)
     }
 }
@@ -164,10 +165,11 @@ fun SearchResultSection(
     context: Context
 ) {
     when (result) {
-        is ResultSearch.Loading -> Text("Loading...")
+        is ResultSearch.Loading -> CircularProgressIndicator()
         is ResultSearch.Error -> {
             Toast.makeText(LocalContext.current, result.msg, Toast.LENGTH_SHORT).show()
         }
+
         is ResultSearch.Success -> {
             LazyColumn(
                 contentPadding = PaddingValues(horizontal = 8.dp),
@@ -211,6 +213,7 @@ fun PopularMealsSection(
                 )
             }
         }
+
         is ResultPopularList.Error -> onError(result.msg)
     }
 }
